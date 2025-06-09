@@ -1,3 +1,0 @@
-matplotlib
-mediapipe
-opencv-python

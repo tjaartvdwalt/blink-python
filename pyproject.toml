@@ -1,0 +1,25 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "blink"
+description = "BLINK"
+authors = [{ name = "Tjaart van der Walt", email = "tjaart@tjaart.org" }]
+dynamic = ["version"]
+dependencies = [
+	"lightning",
+	"matplotlib",
+	"mediapipe",
+	"onnx",
+	"opencv-python",
+	"tensorboard",
+	"torch",
+]
+
+[project.scripts]
+blink = "blink:inference"
+blink_calc_ear = "blink:calc_ear"
+blink_plot_ear = "blink:plot_ear"
+blink_train_nn = "blink:train_nn"
+blink_train_svm = "blink:train_svm"
