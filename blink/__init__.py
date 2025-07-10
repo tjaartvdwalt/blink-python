@@ -1,29 +1,37 @@
 import argparse
 import os
 
-def inference():
-    parser = argparse.ArgumentParser(description="Say hi.")
-    parser.add_argument("target", type=str, help="the name of the target")
-    parser.add_argument(
-        "--end",
-        dest="end",
-        default="!",
-        help="sum the integers (default: find the max)",
-    )
-
-    args = parser.parse_args()
-
-    from .main import main
-
-    main()(args.target, end=args.end)
+import typer
+from typing_extensions import Annotated
+from blink import detector
+app = typer.Typer()
 
 
+@app.command()
+def detect(
+    input_video: Annotated[
+        str, typer.Argument(help="Path to input video, or camera index")
+    ],
+    output_video: Annotated[
+        str, typer.Argument(help="Path to output video")
+    ] = "output.avi",
+    data_path: Annotated[str | None, typer.Option(
+        help="Path to opencv data")] = None,
+    max_height: Annotated[int, typer.Option(
+        help="Max height of output video")] = 1080,
+    hidden: Annotated[int, typer.Option(help="Hide output window")] = 1080,
+    start_frame: Annotated[int, typer.Option(help="Starting frame")] = 1,
+):
+    detector.detect(input_video, output_video, max_height, start_frame)
+
+@app.command()
 def calc_ear():
     trainer.calc_ear()
 
 
 def plot_ear():
     trainer.plot_ear()
+
 
 def train_nn():
     parser = argparse.ArgumentParser(description="Train neural network")
@@ -43,6 +51,7 @@ def train_nn():
     from blink.trainer import nn
 
     nn.run(args.blink_ear, args.non_blink_ear, args.output)
+
 
 def train_svm():
     parser = argparse.ArgumentParser(description="Train SVM model")
@@ -66,3 +75,7 @@ def train_svm():
     from blink.trainer import svm
 
     svm.run(args.blink_ear, args.non_blink_ear, args.output)
+
+
+def main():
+    app()

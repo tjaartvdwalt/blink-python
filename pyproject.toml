@@ -15,11 +15,13 @@ dependencies = [
 	"opencv-python",
 	"tensorboard",
 	"torch",
+	"typer",
 ]
 
 [project.scripts]
-blink = "blink:inference"
-blink_calc_ear = "blink:calc_ear"
-blink_plot_ear = "blink:plot_ear"
-blink_train_nn = "blink:train_nn"
-blink_train_svm = "blink:train_svm"
+blink = "blink:main"
+# blink_calc_ear = "blink:calc_ear"
+blink_plot_ear = "blink.examples.landmark_detector:main"
+blink_stats = "blink.examples.landmark_detector:main"
+# blink_train_nn = "blink:train_nn"
+# blink_train_svm = "blink:train_svm"
