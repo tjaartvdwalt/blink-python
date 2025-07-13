@@ -5,13 +5,14 @@ import typer
 # from sklearn.metrics import ConfusionMatrixDisplay
 from sklearn.metrics import classification_report, confusion_matrix
 
-from utils.eyeblink_entry import EyeBlinkEntry, MalformedEntryError
+from blink.stats.eyeblink_entry import EyeBlinkEntry, MalformedEntryError
 
 # Number of frames that base truth/prediction can differ and still count as a match
 TOLLERANCE = 4
 
+
 # import matplotlib.pyplot as plt
-def annotation_blink_state(file):
+def __annotation_blink_state(file):
     with open(file) as f:
         lines = f.readlines()
 
@@ -32,15 +33,15 @@ def annotation_blink_state(file):
     return out
 
 
-def main(
+def accuracy_recall(
     pred_file: str,
     base_file: str,
 ):
     pred_list = []
     base_list = []
 
-    pred_list = annotation_blink_state(pred_file)
-    base_list = annotation_blink_state(base_file)
+    pred_list = __annotation_blink_state(pred_file)
+    base_list = __annotation_blink_state(base_file)
 
     pred_out = []
     base_out = []
@@ -116,5 +117,5 @@ def main(
     # print(f"Accuracy: {blink_success / blink_total}")
 
 
-if __name__ == "__main__":
-    typer.run(main)
+# if __name__ == "__main__":
+#     typer.run(main)

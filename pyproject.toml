@@ -13,6 +13,7 @@ dependencies = [
 	"mediapipe",
 	"onnx",
 	"opencv-python",
+	"scikit-learn",
 	"tensorboard",
 	"torch",
 	"typer",
@@ -21,7 +22,7 @@ dependencies = [
 [project.scripts]
 blink = "blink:main"
 # blink_calc_ear = "blink:calc_ear"
-blink_plot_ear = "blink.examples.landmark_detector:main"
-blink_stats = "blink.examples.landmark_detector:main"
+# blink_plot_ear = "blink.examples.landmark_detector:main"
+# blink_stats = "blink.stats:main"
 # blink_train_nn = "blink:train_nn"
 # blink_train_svm = "blink:train_svm"
