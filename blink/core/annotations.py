@@ -35,12 +35,12 @@ class Annotations:
         # if face:
         #     face_str = f"{face.x}:{face.y}:{face.width}:{face.height}"
 
-        left_eye_str = "::"
+        left_eye_str = ":::"
         # left_eye = data.getLeftEye()
         # if left_eye:
         #     left_eye_str = f"{left_eye.x}:{left_eye.y +(left_eye.height / 2)}:{left_eye.x + left_eye.width}:{left_eye.y + left_eye.height / 2}"
 
-        right_eye_str = "::"
+        right_eye_str = ":::"
         # right_eye = data.getRightEye()
         # if right_eye:
         #     right_eye_str = f"{right_eye.x}:{right_eye.y +(right_eye.height / 2)}:{right_eye.x + right_eye.width}:{right_eye.y + right_eye.height / 2}"
