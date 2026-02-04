@@ -2,11 +2,13 @@ import mediapipe as mp
 import numpy as np
 from mediapipe.framework.formats import landmark_pb2
 from mediapipe import solutions
+from importlib.resources import files
 
 
 class Landmarker:
     def __init__(self):
-        model_path = "./models/face_landmarker.task"
+
+        model_path = files("blink.models") / "face_landmarker.task"
         BaseOptions = mp.tasks.BaseOptions
         VisionRunningMode = mp.tasks.vision.RunningMode
         FaceLandmarker = mp.tasks.vision.FaceLandmarker

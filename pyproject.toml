@@ -19,6 +19,9 @@ dependencies = [
 	"typer",
 ]
 
+[tool.flit.sdist]
+include = ["blink/models/**"]
+
 [project.scripts]
 blink = "blink:main"
 # blink_calc_ear = "blink:calc_ear"

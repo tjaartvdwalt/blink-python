@@ -8,6 +8,7 @@ from blink.stats import accuracy_recall
 
 from blink.trainer import nn
 from blink.trainer import svm
+from blink.trainer import ear
 
 app = typer.Typer()
 
@@ -15,19 +16,20 @@ app = typer.Typer()
 @app.command()
 def detect(
     input_video: Annotated[
-        str, typer.Argument(help="Path to input video, or camera index")
+        str, typer.Argument(help="Path to input video, or camera index (usually 0)")
     ],
     output_video: Annotated[
         str, typer.Argument(help="Path to output video")
-    ] = "output.avi",
+    ] = "output.mp4v",
     data_path: Annotated[str | None, typer.Option(
         help="Path to opencv data")] = None,
     max_height: Annotated[int, typer.Option(
         help="Max height of output video")] = 1080,
     hidden: Annotated[int, typer.Option(help="Hide output window")] = 1080,
+    rotate: Annotated[bool, typer.Option(help="Rotate the video. This is sometimes needed when handling videos shot in portrait mode")] = False,
     start_frame: Annotated[int, typer.Option(help="Starting frame")] = 1,
 ):
-    detector.detect(input_video, output_video, max_height, start_frame)
+    detector.detect(input_video, output_video, max_height, start_frame, rotate)
 
 
 @app.command()
@@ -43,13 +45,26 @@ def stats(
 
 
 @app.command()
-def calc_ear():
-    trainer.calc_ear()
+def calc_ear(
+    input_video: Annotated[
+        str, typer.Argument(help="Path to input video, or camera index")
+    ],
+    annotation_file: Annotated[
+        str, typer.Argument(
+            help="Path to the annotation file")
+    ],
+    out_dir: Annotated[
+        str, typer.Argument(
+            help="Directory where the ear files are to be saved")
+    ],
+):
+    ear.calc_ear(input_video, annotation_file, out_dir)
 
 
 # def plot_ear():
 #     trainer.plot_ear()
 #
+
 
 @app.command()
 def train_nn(

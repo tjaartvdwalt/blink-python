@@ -1,12 +1,15 @@
 from blink.core.frame.data import FrameData
 import cv2
 
+from blink.core.state import EyeState
+
 
 def annotate_video_frame(frame_data: FrameData):
     frame = frame_data.frame.copy()
 
     white = (255, 255, 255)
     blue = (255, 0, 0)
+    red = (0, 0, 255)
     green = (0, 255, 0)
 
     font_face = cv2.FONT_HERSHEY_PLAIN
@@ -63,6 +66,27 @@ def annotate_video_frame(frame_data: FrameData):
         green,
         font_thickness,
     )
+
+    if frame_data.left_eye_bbox and frame_data.left_eye_state == EyeState.closed:
+        lt, lb = frame_data.left_eye_bbox
+        color = red
+
+        lt_pad = [sum(x) for x in zip(lt , (-15, -15))]
+        lb_pad = [sum(x) for x in zip(lb , (15, 15))]
+
+        cv2.rectangle(frame, lt_pad, lb_pad, color, 1)
+    
+    if frame_data.right_eye_bbox and frame_data.right_eye_state == EyeState.closed:
+        rt, rb = frame_data.right_eye_bbox
+        color = red
+        
+        rt_pad = [sum(x) for x in zip(rt , (-15, -15))]
+        rb_pad = [sum(x) for x in zip(rb , (15, 15))]
+        cv2.rectangle(frame, rt_pad, rb_pad, color, 1)
+
+     #     cv::rectangle(
+     #         frame, *data->data()->getFaceTopLeft(), cv::Scalar(0, 255, 0), 3);
+     # }
 
     # cv2.putText(frame, f"blinks/min: " + std::to_string(data->meta()->blinksFull() /
     #                                             (data->meta()->getTime() / 60)),

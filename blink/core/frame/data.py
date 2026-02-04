@@ -12,10 +12,19 @@ class FrameData:
 
         self.__left_EAR = None
         self.__right_EAR = None
+
+        self.__left_eye_bbox = None
+        self.__right_eye_bbox = None
+
         if len(self.__eye_points) >= 8:
-            (left_EAR, right_EAR) = LandmarkDetector.calc_EAR(self.__eye_points)
+            (left_EAR, right_EAR, left_eye_bbox, right_eye_bbox) = (
+                LandmarkDetector.calc_EAR(self.__eye_points)
+            )
             self.__left_EAR = left_EAR
             self.__right_EAR = right_EAR
+
+            self.__left_eye_bbox = left_eye_bbox
+            self.__right_eye_bbox = right_eye_bbox
 
         self.__left_eye_state = EyeState.undefined
         self.__right_eye_state = EyeState.undefined
@@ -55,6 +64,14 @@ class FrameData:
     @property
     def right_EAR(self):
         return self.__right_EAR
+    
+    @property
+    def left_eye_bbox(self):
+        return self.__left_eye_bbox
+
+    @property
+    def right_eye_bbox(self):
+        return self.__right_eye_bbox
 
     @property
     def left_eye_state(self):

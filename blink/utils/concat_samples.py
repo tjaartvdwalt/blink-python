@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import glob
-
-import typer
+import sys
+# import typer
 
 
 def main(data_dir: str = "sample_data"):
@@ -17,6 +17,7 @@ def main(data_dir: str = "sample_data"):
         out_files.sort()
         with open(f"{data_dir}/{prefix}_dist.ear", "w") as out_file:
             for fname in out_files:
+                print(fname)
                 with open(fname) as in_file:
                     i = 1
                     for line in in_file:
@@ -30,4 +31,6 @@ def main(data_dir: str = "sample_data"):
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    main(sys.argv[1])
+#   typer.run(main)
+

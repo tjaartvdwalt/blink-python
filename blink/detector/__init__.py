@@ -19,9 +19,10 @@ def preprocess_frame(frame):
 
 def detect(
     input_video: str,
-    output_video: str = "output.mp4v",
+    output_video: str = "output.mp4",
     max_height: int | None = None,
     start_frame: int = 0,
+    should_rotate: bool = False
 ):
     left_blinks = 0
     right_blinks = 0
@@ -29,7 +30,14 @@ def detect(
 
     annotations = Annotations("file.tag")
 
-    video = cv2.VideoCapture(input_video)
+    cast_input_video = input_video
+    try:
+        cast_input_video = int(input_video)
+    except ValueError:
+        # Ignore the cast exception
+        pass
+
+    video = cv2.VideoCapture(cast_input_video)
     # video.open(input_video)
 
     if not video.isOpened():
@@ -47,9 +55,10 @@ def detect(
 
     window = FrameWindow(WINDOW_SIZE)
 
-    fourcc = cv2.VideoWriter_fourcc(*"DIVX")
-    out = cv2.VideoWriter(
-        output_video, fourcc, fps, (int(width * scale), int(height * scale))
+    if output_video:
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        out = cv2.VideoWriter(
+            output_video, fourcc, fps, (int(width * scale), int(height * scale))
     )
 
     detector = LandmarkDetector()
@@ -66,6 +75,10 @@ def detect(
 
         cv2.resize(frame, (int(width * scale), int(height * scale)))
 
+
+        if should_rotate:
+            frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+
         if frame_number < start_frame:
             continue
 
@@ -75,16 +88,17 @@ def detect(
         frame_data = FrameData(frame_number, frame)
         window.put(frame_data)
 
+        annotated_frame = None
         if window.full():
             predictor.predict(window)
 
             judge.judge_blink(window)
 
-            if window.prev.left_blink_state == BlinkState.start:
+            if window.cur.left_blink_state == BlinkState.start:
                 left_blinks += 1
-            if window.prev.right_blink_state == BlinkState.start:
+            if window.cur.right_blink_state == BlinkState.start:
                 right_blinks += 1
-            if window.prev.full_blink_state == BlinkState.start:
+            if window.cur.full_blink_state == BlinkState.start:
                 full_blinks += 1
 
             window.cur.left_blinks = left_blinks
@@ -97,16 +111,21 @@ def detect(
             annotated_frame = annotate_video_frame(window.cur)
             cv2.imshow("Original video", annotated_frame)
 
+            if out:
+                out.write(annotated_frame)
             # frame = annotate_video_frame(cur, frame)
+        else:
+            if out:
+                out.write(frame)
 
-        # out.write(frame)
 
 
         if cv2.waitKey(1) == "q":
             break
-
-        # else:
-        #     out.write(frame)
+        else:
+            print('write frame')
+            # out.write(frame)
 
     video.release()
-    out.release()
+    if out:
+        out.release()

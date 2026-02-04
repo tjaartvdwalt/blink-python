@@ -6,6 +6,7 @@ import mediapipe as mp
 
 import math
 
+
 class LandmarkDetector:
     __landmarker = Landmarker().landmarker
 
@@ -48,15 +49,31 @@ class LandmarkDetector:
     @staticmethod
     def __dist(p1, p2):
         return math.sqrt(math.pow(p2[0] - p1[0], 2) + math.pow(p2[1] - p1[1], 2))
-    
+
+    @staticmethod
+    def __calc_bbox(p1, p2, p3, p4):
+        xs, ys = zip(*[p1, p2, p3, p4])
+        min_x = min(xs)
+        max_x = max(xs)
+        min_y = min(ys)
+        max_y = max(ys)
+        return ((min_x, min_y), (max_x, max_y))
+
     @staticmethod
     def calc_EAR(eye_points):
         left_horizontal = LandmarkDetector.__dist(eye_points[0], eye_points[1])
         left_vertical = LandmarkDetector.__dist(eye_points[2], eye_points[3])
-        right_horizontal = LandmarkDetector.__dist(eye_points[4], eye_points[5])
+        right_horizontal = LandmarkDetector.__dist(
+            eye_points[4], eye_points[5])
         right_vertical = LandmarkDetector.__dist(eye_points[6], eye_points[7])
         left_EAR = left_vertical / left_horizontal
         right_EAR = right_vertical / right_horizontal
 
-        return (left_EAR, right_EAR)
+        left_eye_bbox = LandmarkDetector.__calc_bbox(
+            eye_points[0], eye_points[1], eye_points[2], eye_points[3]
+        )
+        right_eye_bbox = LandmarkDetector.__calc_bbox(
+            eye_points[4], eye_points[5], eye_points[6], eye_points[7]
+        )
 
+        return (left_EAR, right_EAR, left_eye_bbox, right_eye_bbox)
