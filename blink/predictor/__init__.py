@@ -3,6 +3,7 @@ from blink.core.frame.window import FrameWindow
 from blink.core.state import EyeState
 from cv2.dnn import Net
 import numpy as np
+from importlib.resources import files, as_file
 
 import cv2
 
@@ -17,7 +18,7 @@ def predict(window: FrameWindow):
         pred_left[0][i] = el.left_EAR
         pred_right[0][i] = el.right_EAR
 
-    net = cv2.dnn.readNet("models/blink.onnx")
+    net = cv2.dnn.readNet(files("blink.models") / 'blink.onnx')
     # blob_left = cv2.dnn.blobFromImage(pred_left)
     # blob_right = cv2.dnn.blobFromImage(pred_right)
     # print(pred_left)
