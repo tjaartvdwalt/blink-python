@@ -10,7 +10,7 @@ dynamic = ["version"]
 dependencies = [
 	"lightning",
 	"matplotlib",
-	"mediapipe ==0.10.21",
+	"mediapipe >=0.10.21",
 	"onnx",
 	"opencv-python",
 	"scikit-learn",
